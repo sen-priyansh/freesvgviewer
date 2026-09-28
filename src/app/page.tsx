@@ -14,7 +14,7 @@ export default function Home() {
   const [fileName, setFileName] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [showCode, setShowCode] = useState(false);
-  const [showMenu, setShowMenu] = useState(false);
+  const [showPngMenu, setShowPngMenu] = useState(false);
   const [exporting, setExporting] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -30,14 +30,14 @@ export default function Home() {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (menuRef.current && !menuRef.current.contains(e.target as Node)) {
-        setShowMenu(false);
+        setShowPngMenu(false);
       }
     };
-    if (showMenu) {
+    if (showPngMenu) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [showMenu]);
+  }, [showPngMenu]);
 
   // Keyboard shortcut: Ctrl/Cmd+O to open
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function Home() {
     async (file: File) => {
       setError(null);
       setShowCode(false);
-      setShowMenu(false);
+      setShowPngMenu(false);
 
       try {
         const source = await readSvgFile(file);
@@ -81,14 +81,28 @@ export default function Home() {
     [blobUrl]
   );
 
-  const handleExport = useCallback(async () => {
+  const handleExportSvg = useCallback(() => {
+    if (!svgSource) return;
+    const exportName = fileName.replace(/\.svg$/i, '') + '.svg';
+    const blob = new Blob([svgSource], { type: 'image/svg+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = exportName;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }, [svgSource, fileName]);
+
+  const handleExportPng = useCallback(async (scale: number) => {
     if (!svgSource) return;
     setExporting(true);
-    setShowMenu(false);
+    setShowPngMenu(false);
 
     try {
       const exportName = fileName.replace(/\.svg$/i, '') + '.png';
-      await exportSvgAsPng(svgSource, exportName);
+      await exportSvgAsPng(svgSource, exportName, scale);
     } catch {
       setError('Unable to export PNG.');
     } finally {
@@ -99,7 +113,7 @@ export default function Home() {
   const handleExportFavicon = useCallback(async () => {
     if (!svgSource) return;
     setExporting(true);
-    setShowMenu(false);
+    setShowPngMenu(false);
 
     try {
       const exportName = fileName.replace(/\.svg$/i, '') + '.ico';
@@ -112,12 +126,12 @@ export default function Home() {
   }, [svgSource, fileName]);
 
   const handleOpenAnother = useCallback(() => {
-    setShowMenu(false);
+    setShowPngMenu(false);
     fileInputRef.current?.click();
   }, []);
 
   const handleClose = useCallback(() => {
-    setShowMenu(false);
+    setShowPngMenu(false);
     if (blobUrl) revokeBlobUrl(blobUrl);
     setSvgSource(null);
     setBlobUrl(null);
@@ -184,6 +198,14 @@ export default function Home() {
             />
             <span className="filename-ext">.svg</span>
           </div>
+          <div className="name-bar-divider" />
+          <button type="button" className="name-bar-btn" onClick={handleExportSvg} title="Download SVG">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+          </button>
         </div>
         <button type="button" className="top-bar-close" onClick={handleClose} title="Close">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -222,19 +244,29 @@ export default function Home() {
 
         <div className="bottom-bar-sep" />
 
-        <button
-          type="button"
-          className="bottom-bar-btn"
-          onClick={handleExport}
-          disabled={exporting}
-        >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-            <polyline points="7 10 12 15 17 10" />
-            <line x1="12" y1="15" x2="12" y2="3" />
-          </svg>
-          <span>PNG</span>
-        </button>
+        <div style={{ position: 'relative' }} ref={menuRef}>
+          <button
+            type="button"
+            className="bottom-bar-btn"
+            onClick={() => setShowPngMenu((prev) => !prev)}
+            disabled={exporting}
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+              <polyline points="7 10 12 15 17 10" />
+              <line x1="12" y1="15" x2="12" y2="3" />
+            </svg>
+            <span>PNG</span>
+          </button>
+
+          {showPngMenu && (
+            <div className="png-menu">
+              <button className="png-menu-btn" onClick={() => handleExportPng(1)}>1x (Original)</button>
+              <button className="png-menu-btn" onClick={() => handleExportPng(2)}>2x (Retina)</button>
+              <button className="png-menu-btn" onClick={() => handleExportPng(4)}>4x (High Res)</button>
+            </div>
+          )}
+        </div>
 
         <button
           type="button"

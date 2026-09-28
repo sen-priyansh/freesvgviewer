@@ -1,7 +1,7 @@
 {
-  "name": "SVG Viewer",
+  "name": "Free SVG Viewer & Converter",
   "short_name": "SVG Viewer",
-  "description": "A simple, fast SVG viewer. Open, view, zoom, pan, and export SVGs as PNG. Works offline.",
+  "description": "Free, fast, and private SVG viewer & converter. View, zoom, pan, and convert SVG to PNG or ICO favicon.",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#0a0a0a",

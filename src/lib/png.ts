@@ -12,14 +12,13 @@ import { parseSvgDimensions, createSvgBlobUrl, revokeBlobUrl } from './svg';
  */
 export async function exportSvgAsPng(
   svgSource: string,
-  fileName: string = 'export.png'
+  fileName: string = 'export.png',
+  scale: number = 1
 ): Promise<void> {
   const { width, height } = parseSvgDimensions(svgSource);
 
-  // Use device pixel ratio for sharper exports
-  const scale = Math.min(window.devicePixelRatio || 1, 2);
-  const canvasWidth = width * scale;
-  const canvasHeight = height * scale;
+  const canvasWidth = Math.round(width * scale);
+  const canvasHeight = Math.round(height * scale);
 
   const canvas = document.createElement('canvas');
   canvas.width = canvasWidth;

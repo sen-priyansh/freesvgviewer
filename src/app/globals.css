@@ -140,6 +140,32 @@ body {
   pointer-events: none;
 }
 
+.name-bar-divider {
+  width: 1px;
+  height: 14px;
+  background: var(--border-medium);
+  margin: 0 4px;
+}
+
+.name-bar-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.name-bar-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
 .top-bar-close {
   display: flex;
   align-items: center;
@@ -225,6 +251,46 @@ body {
   background: var(--border-subtle);
   margin: 0 4px;
   flex-shrink: 0;
+}
+
+/* PNG Export Popup Menu */
+.png-menu {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(20, 20, 20, 0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-md);
+  padding: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+  animation: codeViewerFadeIn 0.15s ease-out;
+  min-width: 120px;
+}
+
+.png-menu-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 13px;
+  font-weight: 500;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+.png-menu-btn:hover {
+  background: var(--bg-hover);
 }
 
 /* ===================================================
