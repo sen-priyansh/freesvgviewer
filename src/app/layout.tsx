@@ -11,87 +11,45 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://freesvgviewer.com'),
+  metadataBase: new URL('https://freesvgviewer.vercel.app'),
   title: {
-    default: 'Free SVG Viewer & Converter | View, Edit & Convert SVG to PNG or ICO',
+    default: 'Free SVG Viewer',
     template: '%s | Free SVG Viewer',
   },
-  description:
-    'Free, ultra-fast, and privacy-focused online SVG viewer and converter. Open, view, zoom, pan, and inspect SVG code. Convert SVG to high-resolution PNG (1x, 2x, 4x) or ICO favicon. 100% offline and secure.',
-  keywords: [
-    'free svg viewer',
-    'svg viewer',
-    'svg to png converter',
-    'svg to ico converter',
-    'svg to favicon converter',
-    'svg viewer online',
-    'svg to png',
-    'svg to ico',
-    'convert svg to png',
-    'convert svg to ico',
-    'svg to favicon',
-    'export svg to png',
-    'high resolution svg to png',
-    'svg code viewer',
-    'svg inspector',
-    'svg editor online',
-    'offline svg viewer',
-    'free vector graphics viewer',
-    'browser svg tool',
-    'client side svg converter',
-    'privacy friendly svg viewer',
-  ],
-  authors: [{ name: 'Free SVG Viewer' }],
-  creator: 'Free SVG Viewer',
-  publisher: 'Free SVG Viewer',
+  description: 'View, inspect, and convert SVG files to PNG or ICO. Free, fast, and completely offline.',
+  keywords: ['svg viewer', 'svg to png', 'svg converter', 'svg to ico'],
   applicationName: 'Free SVG Viewer',
-  category: 'Developer & Design Tools',
   manifest: '/manifest.json',
   icons: {
     icon: [
-      { url: '/favicon.ico', sizes: 'any' },
       { url: '/icons/favicon-32.png', type: 'image/png', sizes: '32x32' },
       { url: '/icons/icon-192.png', type: 'image/png', sizes: '192x192' },
     ],
     apple: [
       { url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
     ],
-    shortcut: '/favicon.ico',
   },
   openGraph: {
     type: 'website',
     locale: 'en_US',
-    url: 'https://freesvgviewer.com',
+    url: 'https://freesvgviewer.vercel.app',
     siteName: 'Free SVG Viewer',
-    title: 'Free SVG Viewer & Converter | View, Inspect & Convert SVG to PNG/ICO',
-    description:
-      'View, pan, zoom, inspect code, and convert SVG files to high-resolution PNG (1x, 2x, 4x) or ICO favicon. 100% free, private, and works offline.',
+    title: 'Free SVG Viewer',
+    description: 'View, inspect, and convert SVG files to PNG or ICO. Free, fast, and completely offline.',
     images: [
       {
         url: '/icons/icon-512.png',
         width: 512,
         height: 512,
-        alt: 'Free SVG Viewer & Converter',
+        alt: 'Free SVG Viewer',
       },
     ],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Free SVG Viewer & Converter | Convert SVG to PNG & ICO',
-    description:
-      'Instant SVG viewer, inspector, and high-res PNG / ICO converter. Runs 100% offline in your browser with zero file uploads.',
+    title: 'Free SVG Viewer',
+    description: 'View, inspect, and convert SVG files to PNG or ICO. Free, fast, and completely offline.',
     images: ['/icons/icon-512.png'],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
   },
   alternates: {
     canonical: '/',
@@ -114,10 +72,9 @@ export const viewport: Viewport = {
 const jsonLd = {
   '@context': 'https://schema.org',
   '@type': 'WebApplication',
-  name: 'Free SVG Viewer & Converter',
-  url: 'https://freesvgviewer.com',
-  description:
-    'Free, ultra-fast, and privacy-focused online SVG viewer and converter. Open, zoom, pan, inspect code, and convert SVG to PNG or ICO favicon offline.',
+  name: 'Free SVG Viewer',
+  url: 'https://freesvgviewer.vercel.app',
+  description: 'View, inspect, and convert SVG files to PNG or ICO completely offline.',
   applicationCategory: 'DesignApplication',
   operatingSystem: 'All',
   browserRequirements: 'Requires JavaScript. Requires HTML5.',
@@ -127,12 +84,11 @@ const jsonLd = {
     priceCurrency: 'USD',
   },
   featureList: [
-    'Free SVG Viewer with pan, zoom and reset controls',
-    'SVG to PNG Converter with 1x, 2x, and 4x resolution presets',
-    'SVG to ICO Converter for browser favicons',
-    'SVG Code Inspector with live syntax highlighting',
-    '100% Client-side processing - files never leave your device',
-    'Progressive Web App (PWA) with full offline support',
+    'View, zoom, and pan SVGs',
+    'Convert SVG to PNG or ICO',
+    'Inspect SVG source code',
+    '100% Client-side processing',
+    'Progressive Web App (PWA)',
   ],
 };
 
