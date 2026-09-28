@@ -66,9 +66,8 @@ export default function PrivacyPage() {
 
         <section className="privacy-section">
           <h2>Browser storage and offline use</h2>
-          <p>The app uses a small amount of browser-managed storage for convenience:</p>
+          <p>The app uses browser-managed storage for offline use:</p>
           <ul>
-            <li><strong>Install prompt preference.</strong> If you dismiss the install prompt, the app stores the time of that choice in <code>localStorage</code> under <code>pwa_prompt_dismissed</code>. It is used only to wait seven days before showing the prompt again.</li>
             <li><strong>Offline cache.</strong> A service worker may cache site files such as pages, scripts, styles, and icons so the app can open while you are offline. Your selected SVG files and exported images are not deliberately added to this cache.</li>
           </ul>
           <p>You can remove this information at any time by clearing this site&apos;s data in your browser settings. That may also remove the offline version of the app.</p>

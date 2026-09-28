@@ -4,7 +4,7 @@ A small, browser-based SVG viewer and converter. Open an SVG, inspect its markup
 
 ## Privacy
 
-SVG files are read and processed in the browser. The app does not upload selected files or keep a conversion history. It uses browser storage only for the optional install prompt and offline app cache. See [the full privacy policy](./PRIVACY.md) for details.
+SVG files are read and processed in the browser. The app does not upload selected files or keep a conversion history. Browser storage is used only for the offline app cache. See [the full privacy policy](./PRIVACY.md) for details.
 
 ## Features
 

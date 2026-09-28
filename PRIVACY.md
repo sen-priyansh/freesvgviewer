@@ -22,9 +22,8 @@ We do not collect a record of SVG filenames, exports, or editor activity. The ap
 
 ## Browser storage and offline use
 
-The app uses limited browser-managed storage for convenience:
+The app uses browser-managed storage for offline use:
 
-- **Install prompt preference:** If you dismiss the install prompt, the time of that choice is stored in `localStorage` under `pwa_prompt_dismissed`. It is used only to wait seven days before showing the prompt again.
 - **Offline cache:** A service worker may cache site files such as pages, scripts, styles, and icons so the app can work offline. Selected SVG files and exported images are not deliberately added to that cache.
 
 You can remove this information at any time by clearing this site's data in your browser settings. Doing so may also remove the offline version of the app.

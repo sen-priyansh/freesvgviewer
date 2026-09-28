@@ -1,6 +1,6 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'svg-viewer-v2';
+const CACHE_NAME = 'svg-viewer-v3';
 
 const PRECACHE_URLS = [
   '/',

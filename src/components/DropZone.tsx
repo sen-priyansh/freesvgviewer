@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 
 interface DropZoneProps {
@@ -9,6 +9,9 @@ interface DropZoneProps {
 
 export default function DropZone({ onFileSelected }: DropZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
+  const [isInstallAvailable, setIsInstallAvailable] = useState(
+    () => typeof window !== 'undefined' && window.pwaInstallAvailable === true
+  );
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dragCounter = useRef(0);
 
@@ -76,6 +79,19 @@ export default function DropZone({ onFileSelected }: DropZoneProps) {
 
   const handleChooseClick = useCallback(() => {
     fileInputRef.current?.click();
+  }, []);
+
+  useEffect(() => {
+    const showInstallButton = () => setIsInstallAvailable(true);
+    const hideInstallButton = () => setIsInstallAvailable(false);
+
+    window.addEventListener('pwa-install-available', showInstallButton);
+    window.addEventListener('pwa-install-unavailable', hideInstallButton);
+
+    return () => {
+      window.removeEventListener('pwa-install-available', showInstallButton);
+      window.removeEventListener('pwa-install-unavailable', hideInstallButton);
+    };
   }, []);
 
   return (
@@ -188,6 +204,21 @@ export default function DropZone({ onFileSelected }: DropZoneProps) {
             onChange={handleInputChange}
           />
         </div>
+
+        {isInstallAvailable && (
+          <button
+            type="button"
+            className="home-pwa-install"
+            onClick={() => window.dispatchEvent(new Event('pwa-install-request'))}
+          >
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+              <path d="M12 3v12" />
+              <path d="m7 10 5 5 5-5" />
+              <path d="M5 21h14" />
+            </svg>
+            Install app
+          </button>
+        )}
 
         <div className="home-privacy">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
