@@ -10,6 +10,7 @@ interface SvgViewerProps {
 const MIN_ZOOM = 0.1;
 const MAX_ZOOM = 20;
 const ZOOM_STEP = 0.15;
+const PAN_STEP = 24;
 
 export default function SvgViewer({ blobUrl, fileName }: SvgViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -154,6 +155,16 @@ export default function SvgViewer({ blobUrl, fileName }: SvgViewerProps) {
   // Keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      const target = e.target as HTMLElement | null;
+      if (
+        target?.isContentEditable ||
+        target?.tagName === 'INPUT' ||
+        target?.tagName === 'TEXTAREA' ||
+        target?.tagName === 'SELECT'
+      ) {
+        return;
+      }
+
       if (e.key === '+' || e.key === '=') {
         e.preventDefault();
         zoomIn();
@@ -163,6 +174,18 @@ export default function SvgViewer({ blobUrl, fileName }: SvgViewerProps) {
       } else if (e.key === '0') {
         e.preventDefault();
         resetZoom();
+      } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        setPan((current) => ({ ...current, x: current.x + PAN_STEP }));
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        setPan((current) => ({ ...current, x: current.x - PAN_STEP }));
+      } else if (e.key === 'ArrowUp') {
+        e.preventDefault();
+        setPan((current) => ({ ...current, y: current.y + PAN_STEP }));
+      } else if (e.key === 'ArrowDown') {
+        e.preventDefault();
+        setPan((current) => ({ ...current, y: current.y - PAN_STEP }));
       }
     };
 

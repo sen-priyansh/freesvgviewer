@@ -8,10 +8,16 @@ export interface SvgDimensions {
   height: number;
 }
 
+export const MAX_SVG_FILE_SIZE = 5 * 1024 * 1024;
+
 /**
  * Read an SVG file and return its text content.
  */
 export function readSvgFile(file: File): Promise<string> {
+  if (file.size > MAX_SVG_FILE_SIZE) {
+    return Promise.reject(new Error('SVG files must be 5 MB or smaller.'));
+  }
+
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.onload = () => {
@@ -27,9 +33,14 @@ export function readSvgFile(file: File): Promise<string> {
  * Validate that the string looks like an SVG.
  */
 export function validateSvg(source: string): boolean {
-  const trimmed = source.trim();
-  // Must contain an <svg element
-  return /<svg[\s>]/i.test(trimmed);
+  const document = new DOMParser().parseFromString(source, 'image/svg+xml');
+  const root = document.documentElement;
+
+  return (
+    !document.querySelector('parsererror') &&
+    root.localName.toLowerCase() === 'svg' &&
+    root.namespaceURI === 'http://www.w3.org/2000/svg'
+  );
 }
 
 /**

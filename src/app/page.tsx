@@ -74,8 +74,10 @@ export default function Home() {
         setSvgSource(source);
         setBlobUrl(newBlobUrl);
         setFileName(file.name);
-      } catch {
-        setError('Unable to open this SVG.');
+      } catch (caughtError) {
+        setError(
+          caughtError instanceof Error ? caughtError.message : 'Unable to open this SVG.'
+        );
       }
     },
     [blobUrl]
@@ -103,8 +105,10 @@ export default function Home() {
     try {
       const exportName = fileName.replace(/\.svg$/i, '') + '.png';
       await exportSvgAsPng(svgSource, exportName, scale);
-    } catch {
-      setError('Unable to export PNG.');
+    } catch (caughtError) {
+      setError(
+        caughtError instanceof Error ? caughtError.message : 'Unable to export PNG.'
+      );
     } finally {
       setExporting(false);
     }

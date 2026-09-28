@@ -1,10 +1,22 @@
 /// <reference lib="webworker" />
 
-const CACHE_NAME = 'svg-viewer-v1';
+const CACHE_NAME = 'svg-viewer-v2';
 
 const PRECACHE_URLS = [
   '/',
+  '/privacy',
 ];
+
+function isCacheableRequest(request) {
+  const url = new URL(request.url);
+
+  return (
+    request.method === 'GET' &&
+    url.origin === self.location.origin &&
+    (request.mode === 'navigate' ||
+      ['script', 'style', 'image', 'font', 'manifest'].includes(request.destination))
+  );
+}
 
 // Install: precache the app shell
 self.addEventListener('install', (event) => {
@@ -37,11 +49,7 @@ self.addEventListener('fetch', (event) => {
   const e = event;
   const request = e.request;
 
-  // Only handle GET requests
-  if (request.method !== 'GET') return;
-
-  // Skip blob URLs and browser-extension URLs
-  if (request.url.startsWith('blob:') || request.url.startsWith('chrome-extension:')) return;
+  if (!isCacheableRequest(request)) return;
 
   e.respondWith(
     fetch(request)
@@ -49,9 +57,7 @@ self.addEventListener('fetch', (event) => {
         // Clone and cache successful responses
         if (response.ok) {
           const clone = response.clone();
-          caches.open(CACHE_NAME).then((cache) => {
-            cache.put(request, clone);
-          });
+          e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.put(request, clone)));
         }
         return response;
       })

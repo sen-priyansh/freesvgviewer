@@ -1388,6 +1388,11 @@ body {
   color: var(--text-primary);
 }
 
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
 @media (max-width: 640px) {
   .privacy-header {
     padding: 10px 12px;

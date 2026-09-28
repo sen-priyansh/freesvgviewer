@@ -1,36 +1,48 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Free SVG Viewer
 
-## Getting Started
+A small, browser-based SVG viewer and converter. Open an SVG, inspect its markup, pan and zoom the preview, or export it as PNG or ICO.
 
-First, run the development server:
+## Privacy
+
+SVG files are read and processed in the browser. The app does not upload selected files or keep a conversion history. It uses browser storage only for the optional install prompt and offline app cache. See [the full privacy policy](./PRIVACY.md) for details.
+
+## Features
+
+- Open SVG files by choosing or dragging them into the app
+- Preview with pan, zoom, fit, and reset controls
+- Inspect and copy SVG source
+- Export SVG, PNG at 1x/2x/4x, or a multi-size ICO favicon
+- Install as a Progressive Web App and use it offline after the app shell is cached
+
+## Safety limits
+
+The app accepts SVG files up to 5 MB. PNG export is capped at 8,192 pixels on either side and 40 million total pixels to avoid exhausting browser memory.
+
+## Development
+
+Requirements: Node.js 20 or newer.
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm test
+npm run build
+```
 
-## Learn More
+The test suite covers SVG validation, dimension parsing, and export-size safeguards.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployment
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Set `NEXT_PUBLIC_SITE_URL` to the public site origin before deployment so generated metadata, robots.txt, and sitemap URLs use the correct domain. The default is `https://freesvgviewer.com`.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## License
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT. See [LICENSE](./LICENSE).

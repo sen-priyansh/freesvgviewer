@@ -6,6 +6,31 @@
 
 import { parseSvgDimensions, createSvgBlobUrl, revokeBlobUrl } from './svg';
 
+export const MAX_EXPORT_DIMENSION = 8_192;
+export const MAX_EXPORT_PIXELS = 40_000_000;
+
+export function assertSafeExportDimensions(width: number, height: number, scale: number): void {
+  const outputWidth = Math.round(width * scale);
+  const outputHeight = Math.round(height * scale);
+
+  if (
+    !Number.isFinite(outputWidth) ||
+    !Number.isFinite(outputHeight) ||
+    outputWidth < 1 ||
+    outputHeight < 1
+  ) {
+    throw new Error('This SVG has invalid dimensions.');
+  }
+
+  if (outputWidth > MAX_EXPORT_DIMENSION || outputHeight > MAX_EXPORT_DIMENSION) {
+    throw new Error(`Exports are limited to ${MAX_EXPORT_DIMENSION}px on either side.`);
+  }
+
+  if (outputWidth * outputHeight > MAX_EXPORT_PIXELS) {
+    throw new Error('This export is too large to create safely.');
+  }
+}
+
 /**
  * Export SVG source code as a PNG file.
  * Uses the original SVG dimensions, not the current zoom level.
@@ -19,6 +44,8 @@ export async function exportSvgAsPng(
 
   const canvasWidth = Math.round(width * scale);
   const canvasHeight = Math.round(height * scale);
+
+  assertSafeExportDimensions(width, height, scale);
 
   const canvas = document.createElement('canvas');
   canvas.width = canvasWidth;
