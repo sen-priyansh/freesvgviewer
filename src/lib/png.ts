@@ -31,6 +31,19 @@ export function assertSafeExportDimensions(width: number, height: number, scale:
   }
 }
 
+export function getScaleForLongEdge(width: number, height: number, longEdge: number): number {
+  if (!Number.isFinite(longEdge) || longEdge < 1) {
+    throw new Error('Choose a valid export size.');
+  }
+
+  const sourceLongEdge = Math.max(width, height);
+  if (!Number.isFinite(sourceLongEdge) || sourceLongEdge < 1) {
+    throw new Error('This SVG has invalid dimensions.');
+  }
+
+  return Math.max(1, longEdge / sourceLongEdge);
+}
+
 /**
  * Export SVG source code as a PNG file.
  * Uses the original SVG dimensions, not the current zoom level.
@@ -74,6 +87,20 @@ export async function exportSvgAsPng(
   } finally {
     revokeBlobUrl(blobUrl);
   }
+}
+
+/**
+ * Export at least the requested longest-edge size without downscaling a larger SVG.
+ */
+export async function exportSvgAsPngAtResolution(
+  svgSource: string,
+  fileName: string,
+  longEdge: number
+): Promise<void> {
+  const { width, height } = parseSvgDimensions(svgSource);
+  const scale = getScaleForLongEdge(width, height, longEdge);
+
+  await exportSvgAsPng(svgSource, fileName, scale);
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {

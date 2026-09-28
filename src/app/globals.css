@@ -268,7 +268,7 @@ body {
   gap: 2px;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
   animation: codeViewerFadeIn 0.15s ease-out;
-  min-width: 120px;
+  min-width: 176px;
 }
 
 .png-menu-btn {

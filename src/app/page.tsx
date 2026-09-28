@@ -5,7 +5,7 @@ import DropZone from '@/components/DropZone';
 import SvgViewer from '@/components/SvgViewer';
 import CodeViewer from '@/components/CodeViewer';
 import { readSvgFile, validateSvg, createSvgBlobUrl, revokeBlobUrl } from '@/lib/svg';
-import { exportSvgAsPng } from '@/lib/png';
+import { exportSvgAsPng, exportSvgAsPngAtResolution } from '@/lib/png';
 import { exportSvgAsFavicon } from '@/lib/favicon';
 
 export default function Home() {
@@ -97,14 +97,18 @@ export default function Home() {
     URL.revokeObjectURL(url);
   }, [svgSource, fileName]);
 
-  const handleExportPng = useCallback(async (scale: number) => {
+  const handleExportPng = useCallback(async (longEdge: number | null) => {
     if (!svgSource) return;
     setExporting(true);
     setShowPngMenu(false);
 
     try {
       const exportName = fileName.replace(/\.svg$/i, '') + '.png';
-      await exportSvgAsPng(svgSource, exportName, scale);
+      if (longEdge === null) {
+        await exportSvgAsPng(svgSource, exportName);
+      } else {
+        await exportSvgAsPngAtResolution(svgSource, exportName, longEdge);
+      }
     } catch (caughtError) {
       setError(
         caughtError instanceof Error ? caughtError.message : 'Unable to export PNG.'
@@ -279,9 +283,11 @@ export default function Home() {
 
           {showPngMenu && (
             <div className="png-menu">
-              <button className="png-menu-btn" onClick={() => handleExportPng(1)}>1x (Original)</button>
-              <button className="png-menu-btn" onClick={() => handleExportPng(2)}>2x (Retina)</button>
-              <button className="png-menu-btn" onClick={() => handleExportPng(4)}>4x (High Res)</button>
+              <button type="button" className="png-menu-btn" onClick={() => handleExportPng(1024)}>1024px (Recommended)</button>
+              <button type="button" className="png-menu-btn" onClick={() => handleExportPng(2048)}>2048px</button>
+              <button type="button" className="png-menu-btn" onClick={() => handleExportPng(4096)}>4096px</button>
+              <button type="button" className="png-menu-btn" onClick={() => handleExportPng(6144)}>6144px</button>
+              <button type="button" className="png-menu-btn" onClick={() => handleExportPng(null)}>Original size</button>
             </div>
           )}
         </div>
