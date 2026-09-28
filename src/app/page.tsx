@@ -165,103 +165,100 @@ export default function Home() {
   // SVG loaded — show viewer
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <div className="app-header-left">
-          <h1 className="app-title">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img className="app-logo" src="/freesvg.svg" alt="Logo" width="20" height="20" />
-            <span className="app-filename">{fileName}</span>
-          </h1>
+      {/* Ambient background glow to match home screen */}
+      <div className="home-glow home-glow-1" />
+      <div className="home-glow home-glow-2" />
+
+      {/* Top bar: filename + close */}
+      <div className="top-bar">
+        <div className="file-info-box">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="floating-logo" src="/freesvg.svg" alt="Logo" width="18" height="18" />
+          <div className="filename-input-wrapper">
+            <input
+              type="text"
+              className="filename-input"
+              value={fileName.replace(/\.svg$/i, '')}
+              onChange={(e) => setFileName(e.target.value ? e.target.value + '.svg' : '.svg')}
+              spellCheck={false}
+            />
+            <span className="filename-ext">.svg</span>
+          </div>
         </div>
+        <button type="button" className="top-bar-close" onClick={handleClose} title="Close">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="18" y1="6" x2="6" y2="18" />
+            <line x1="6" y1="6" x2="18" y2="18" />
+          </svg>
+        </button>
+      </div>
 
-        <div className="app-header-right" ref={menuRef}>
-          {/* Export button (always visible on desktop) */}
-          <button
-            type="button"
-            className="header-action-btn export-btn-desktop"
-            onClick={handleExport}
-            disabled={exporting}
-            title="Export as PNG"
-          >
-            {exporting ? 'Exporting…' : 'Export PNG'}
-          </button>
+      {/* Bottom action bar */}
+      <div className="bottom-bar">
+        <button
+          type="button"
+          className={`bottom-bar-btn ${!showCode ? 'active' : ''}`}
+          onClick={() => setShowCode(false)}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <circle cx="8.5" cy="8.5" r="1.5" />
+            <polyline points="21 15 16 10 5 21" />
+          </svg>
+          <span>Preview</span>
+        </button>
 
-          {/* Menu button */}
-          <button
-            type="button"
-            className="header-menu-btn"
-            onClick={() => setShowMenu((prev) => !prev)}
-            aria-label="Menu"
-            title="Menu"
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-              <circle cx="12" cy="5" r="2" />
-              <circle cx="12" cy="12" r="2" />
-              <circle cx="12" cy="19" r="2" />
-            </svg>
-          </button>
+        <button
+          type="button"
+          className={`bottom-bar-btn ${showCode ? 'active' : ''}`}
+          onClick={() => setShowCode(true)}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polyline points="16 18 22 12 16 6" />
+            <polyline points="8 6 2 12 8 18" />
+          </svg>
+          <span>Code</span>
+        </button>
 
-          {/* Dropdown menu */}
-          {showMenu && (
-            <div className="header-menu">
-              <button type="button" className="menu-item" onClick={handleOpenAnother}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
-                  <polyline points="14 2 14 8 20 8" />
-                </svg>
-                Open SVG
-              </button>
-              <button
-                type="button"
-                className="menu-item export-btn-mobile"
-                onClick={handleExport}
-                disabled={exporting}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                  <polyline points="7 10 12 15 17 10" />
-                  <line x1="12" y1="15" x2="12" y2="3" />
-                </svg>
-                {exporting ? 'Exporting…' : 'Export PNG'}
-              </button>
-              <button
-                type="button"
-                className="menu-item"
-                onClick={() => {
-                  setShowCode(true);
-                  setShowMenu(false);
-                }}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <polyline points="16 18 22 12 16 6" />
-                  <polyline points="8 6 2 12 8 18" />
-                </svg>
-                View Code
-              </button>
-              <button
-                type="button"
-                className="menu-item"
-                onClick={handleExportFavicon}
-                disabled={exporting}
-              >
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="2" y="2" width="20" height="20" rx="2" />
-                  <circle cx="12" cy="12" r="3" />
-                </svg>
-                Export Favicon
-              </button>
-              <div className="menu-divider" />
-              <button type="button" className="menu-item menu-item-danger" onClick={handleClose}>
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <line x1="18" y1="6" x2="6" y2="18" />
-                  <line x1="6" y1="6" x2="18" y2="18" />
-                </svg>
-                Close
-              </button>
-            </div>
-          )}
-        </div>
-      </header>
+        <div className="bottom-bar-sep" />
+
+        <button
+          type="button"
+          className="bottom-bar-btn"
+          onClick={handleExport}
+          disabled={exporting}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+            <polyline points="7 10 12 15 17 10" />
+            <line x1="12" y1="15" x2="12" y2="3" />
+          </svg>
+          <span>PNG</span>
+        </button>
+
+        <button
+          type="button"
+          className="bottom-bar-btn"
+          onClick={handleExportFavicon}
+          disabled={exporting}
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <rect x="2" y="2" width="20" height="20" rx="2" />
+            <circle cx="12" cy="12" r="3" />
+          </svg>
+          <span>Favicon</span>
+        </button>
+
+        <div className="bottom-bar-sep" />
+
+        <button type="button" className="bottom-bar-btn" onClick={handleOpenAnother}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+            <polyline points="14 2 14 8 20 8" />
+          </svg>
+          <span>Open</span>
+        </button>
+      </div>
 
       {error && (
         <div className="error-banner">
@@ -277,10 +274,10 @@ export default function Home() {
         </div>
       )}
 
-      <SvgViewer blobUrl={blobUrl} fileName={fileName} />
-
-      {showCode && (
-        <CodeViewer source={svgSource} onClose={() => setShowCode(false)} />
+      {!showCode ? (
+        <SvgViewer blobUrl={blobUrl} fileName={fileName} />
+      ) : (
+        <CodeViewer source={svgSource!} />
       )}
 
       {/* Hidden file input for "Open" action */}
