@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
 import PwaInstallPrompt from '@/components/PwaInstallPrompt';
+import { Analytics } from '@vercel/analytics/react';
 import './globals.css';
 
 const inter = Inter({
@@ -152,6 +153,7 @@ export default function RootLayout({
         <ServiceWorkerRegistrar />
         {children}
         <PwaInstallPrompt />
+        <Analytics />
       </body>
     </html>
   );
