@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
 import ServiceWorkerRegistrar from '@/components/ServiceWorkerRegistrar';
+import PwaInstallPrompt from '@/components/PwaInstallPrompt';
 import './globals.css';
 
 const inter = Inter({
@@ -150,6 +151,7 @@ export default function RootLayout({
       <body>
         <ServiceWorkerRegistrar />
         {children}
+        <PwaInstallPrompt />
       </body>
     </html>
   );
