@@ -51,36 +51,39 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyDown);
   }, []);
 
+  const loadSvgSource = useCallback((source: string, name: string): boolean => {
+    setError(null);
+    setShowCode(false);
+    setShowPngMenu(false);
+
+    if (!validateSvg(source)) {
+      setError('That code doesn\u2019t appear to be a valid SVG.');
+      return false;
+    }
+
+    if (blobUrl) {
+      revokeBlobUrl(blobUrl);
+    }
+
+    const newBlobUrl = createSvgBlobUrl(source);
+    setSvgSource(source);
+    setBlobUrl(newBlobUrl);
+    setFileName(name);
+    return true;
+  }, [blobUrl]);
+
   const handleFileSelected = useCallback(
     async (file: File) => {
-      setError(null);
-      setShowCode(false);
-      setShowPngMenu(false);
-
       try {
         const source = await readSvgFile(file);
-
-        if (!validateSvg(source)) {
-          setError("That file doesn\u2019t appear to be a valid SVG.");
-          return;
-        }
-
-        // Clean up previous blob URL
-        if (blobUrl) {
-          revokeBlobUrl(blobUrl);
-        }
-
-        const newBlobUrl = createSvgBlobUrl(source);
-        setSvgSource(source);
-        setBlobUrl(newBlobUrl);
-        setFileName(file.name);
+        loadSvgSource(source, file.name);
       } catch (caughtError) {
         setError(
           caughtError instanceof Error ? caughtError.message : 'Unable to open this SVG.'
         );
       }
     },
-    [blobUrl]
+    [loadSvgSource]
   );
 
   const handleExportSvg = useCallback(() => {
@@ -179,7 +182,7 @@ export default function Home() {
           </div>
         )}
 
-        <DropZone onFileSelected={handleFileSelected} />
+        <DropZone onFileSelected={handleFileSelected} onSvgCodePasted={loadSvgSource} />
       </div>
     );
   }

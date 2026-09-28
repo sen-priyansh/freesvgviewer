@@ -560,6 +560,136 @@ body {
   box-shadow: 0 2px 8px rgba(59, 130, 246, 0.25);
 }
 
+.dropzone-paste-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 12px;
+  padding: 2px 6px;
+  text-decoration: underline;
+  text-decoration-color: var(--border-medium);
+  text-underline-offset: 3px;
+}
+
+.dropzone-paste-btn:hover {
+  color: var(--text-primary);
+}
+
+.paste-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.68);
+}
+
+.paste-dialog {
+  width: min(100%, 620px);
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-lg);
+  background: var(--bg-secondary);
+  box-shadow: var(--shadow-xl);
+  padding: 20px;
+}
+
+.paste-dialog-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.paste-dialog-header h2 {
+  font-size: 17px;
+  letter-spacing: -0.02em;
+}
+
+.paste-dialog-header p {
+  color: var(--text-secondary);
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.paste-dialog-close,
+.paste-dialog-cancel,
+.paste-dialog-preview {
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.paste-dialog-close {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 22px;
+  line-height: 1;
+}
+
+.paste-dialog-close:hover,
+.paste-dialog-cancel:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+}
+
+.paste-dialog-input {
+  display: block;
+  width: 100%;
+  min-height: 240px;
+  resize: vertical;
+  border: 1px solid var(--border-medium);
+  border-radius: var(--radius-sm);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'JetBrains Mono', 'Fira Code', 'SF Mono', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  outline: none;
+  padding: 12px;
+}
+
+.paste-dialog-input:focus {
+  border-color: var(--accent);
+}
+
+.paste-dialog-error {
+  color: #fca5a5;
+  font-size: 13px;
+  margin-top: 8px;
+}
+
+.paste-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+.paste-dialog-cancel {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  padding: 8px 12px;
+}
+
+.paste-dialog-preview {
+  border: none;
+  background: var(--accent);
+  color: white;
+  padding: 8px 12px;
+}
+
+.paste-dialog-preview:hover {
+  background: var(--accent-hover);
+}
+
 /* Feature chips */
 .home-features {
   display: flex;

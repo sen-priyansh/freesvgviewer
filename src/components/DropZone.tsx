@@ -5,13 +5,17 @@ import Link from 'next/link';
 
 interface DropZoneProps {
   onFileSelected: (file: File) => void;
+  onSvgCodePasted: (source: string, name: string) => boolean;
 }
 
-export default function DropZone({ onFileSelected }: DropZoneProps) {
+export default function DropZone({ onFileSelected, onSvgCodePasted }: DropZoneProps) {
   const [isDragging, setIsDragging] = useState(false);
   const [isInstallAvailable, setIsInstallAvailable] = useState(
     () => typeof window !== 'undefined' && window.pwaInstallAvailable === true
   );
+  const [isPasteDialogOpen, setIsPasteDialogOpen] = useState(false);
+  const [pastedCode, setPastedCode] = useState('');
+  const [pasteError, setPasteError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
   const dragCounter = useRef(0);
 
@@ -80,6 +84,41 @@ export default function DropZone({ onFileSelected }: DropZoneProps) {
   const handleChooseClick = useCallback(() => {
     fileInputRef.current?.click();
   }, []);
+
+  const openPasteDialog = useCallback(() => {
+    setPasteError('');
+    setIsPasteDialogOpen(true);
+  }, []);
+
+  const closePasteDialog = useCallback(() => {
+    setIsPasteDialogOpen(false);
+    setPasteError('');
+  }, []);
+
+  const handlePasteSubmit = useCallback(() => {
+    if (!pastedCode.trim()) {
+      setPasteError('Paste SVG code to continue.');
+      return;
+    }
+
+    if (onSvgCodePasted(pastedCode, 'pasted-svg.svg')) {
+      setPastedCode('');
+      closePasteDialog();
+    } else {
+      setPasteError('That code doesn\'t appear to be a valid SVG.');
+    }
+  }, [closePasteDialog, onSvgCodePasted, pastedCode]);
+
+  useEffect(() => {
+    if (!isPasteDialogOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') closePasteDialog();
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [closePasteDialog, isPasteDialogOpen]);
 
   useEffect(() => {
     const showInstallButton = () => setIsInstallAvailable(true);
@@ -194,6 +233,9 @@ export default function DropZone({ onFileSelected }: DropZoneProps) {
               </svg>
               Choose SVG
             </button>
+            <button type="button" className="dropzone-paste-btn" onClick={openPasteDialog}>
+              Paste SVG code
+            </button>
           </div>
 
           <input
@@ -232,6 +274,41 @@ export default function DropZone({ onFileSelected }: DropZoneProps) {
           </Link>
         </div>
       </div>
+
+      {isPasteDialogOpen && (
+        <div className="paste-dialog-backdrop" onMouseDown={closePasteDialog}>
+          <section
+            className="paste-dialog"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="paste-dialog-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="paste-dialog-header">
+              <div>
+                <h2 id="paste-dialog-title">Paste SVG code</h2>
+                <p>It stays in your browser.</p>
+              </div>
+              <button type="button" className="paste-dialog-close" onClick={closePasteDialog} aria-label="Close paste dialog">
+                ×
+              </button>
+            </div>
+            <textarea
+              className="paste-dialog-input"
+              value={pastedCode}
+              onChange={(event) => setPastedCode(event.target.value)}
+              placeholder={'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">…</svg>'}
+              spellCheck={false}
+              autoFocus
+            />
+            {pasteError && <p className="paste-dialog-error">{pasteError}</p>}
+            <div className="paste-dialog-actions">
+              <button type="button" className="paste-dialog-cancel" onClick={closePasteDialog}>Cancel</button>
+              <button type="button" className="paste-dialog-preview" onClick={handlePasteSubmit}>Preview SVG</button>
+            </div>
+          </section>
+        </div>
+      )}
     </div>
   );
 }
