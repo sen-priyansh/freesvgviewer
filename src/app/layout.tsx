@@ -22,11 +22,11 @@ export const metadata: Metadata = {
   manifest: '/manifest.json',
   icons: {
     icon: [
-      { url: '/icons/favicon-32.png', type: 'image/png', sizes: '32x32' },
-      { url: '/icons/icon-192.png', type: 'image/png', sizes: '192x192' },
+      { url: '/icons/freesvg-32.png', type: 'image/png', sizes: '32x32' },
+      { url: '/icons/freesvg-192.png', type: 'image/png', sizes: '192x192' },
     ],
     apple: [
-      { url: '/icons/apple-touch-icon.png', sizes: '180x180', type: 'image/png' },
+      { url: '/icons/freesvg-180.png', sizes: '180x180', type: 'image/png' },
     ],
   },
   openGraph: {
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     description: 'View, inspect, and convert SVG files to PNG or ICO. Free, fast, and completely offline.',
     images: [
       {
-        url: '/icons/icon-512.png',
+        url: '/icons/freesvg-512.png',
         width: 512,
         height: 512,
         alt: 'Free SVG Viewer',
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Free SVG Viewer',
     description: 'View, inspect, and convert SVG files to PNG or ICO. Free, fast, and completely offline.',
-    images: ['/icons/icon-512.png'],
+    images: ['/icons/freesvg-512.png'],
   },
   alternates: {
     canonical: '/',

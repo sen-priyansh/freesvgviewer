@@ -271,6 +271,22 @@ export default function SvgViewer({ blobUrl, fileName }: SvgViewerProps) {
 
         <button
           type="button"
+          className="toolbar-btn"
+          onClick={() => setPan({ x: 0, y: 0 })}
+          title="Center image"
+          aria-label="Center image"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="3" />
+            <path d="M12 2v4" />
+            <path d="M12 18v4" />
+            <path d="M2 12h4" />
+            <path d="M18 12h4" />
+          </svg>
+        </button>
+
+        <button
+          type="button"
           className="toolbar-btn toolbar-btn-text"
           onClick={resetZoom}
           title="Reset zoom (0)"
